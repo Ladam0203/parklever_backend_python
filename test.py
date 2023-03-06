@@ -1,0 +1,3 @@
+import license_plate_recognition
+
+license_plate_recognition.recognize('license_plate_raw.jpg')
