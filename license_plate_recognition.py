@@ -5,7 +5,6 @@ import base64
 import pytesseract
 import re
 
-
 pytesseract.pytesseract.tesseract_cmd = 'S:\\Tesseract-OCR\\tesseract.exe'
 
 
@@ -21,8 +20,8 @@ def recognize(base64_image):
     original_image = cv2.imdecode(image_array, flags=cv2.IMREAD_COLOR)
     # Gray image
     gray_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2GRAY)
-    # cv2.imshow("greyed image", gray_image)
-    # cv2.waitKey(0)
+    cv2.imshow("greyed image", gray_image)
+    cv2.waitKey(0)
     # Smoothen image
     gray_image = cv2.bilateralFilter(gray_image, 11, 17, 17)
     # cv2.imshow("smoothened image", gray_image)
@@ -62,14 +61,17 @@ def recognize(base64_image):
         cv2.drawContours(image1, [screenCnt], -1, (0, 255, 0), 3)
     except:
         return None
-        # cv2.imshow("image with detected license plate", image1)
-        # cv2.waitKey(0)
+    # cv2.imshow("image with detected license plate", image1)
+    # cv2.waitKey(0)
     # Recognize the license plate
     Cropped_loc = './7.png'
     # cv2.imshow("cropped", cv2.imread(Cropped_loc))
     plate = pytesseract.image_to_string(Cropped_loc, lang='eng')
-    if plate == "":
-        return None
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
+    #Treat plate with regex
+    plate = re.sub(r'[^A-Za-z0-9+$]', '', plate)
+    print("Plate: " + plate)
+    if plate == "":
+        return None
     return plate
