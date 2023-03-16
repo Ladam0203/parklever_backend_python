@@ -1,7 +1,6 @@
 import paho.mqtt.client as mqtt
 import license_plate_recognition as lpr
 import db_connection as db
-import re
 
 # MQTT client configuration
 mqtt_broker = 'mqtt.flespi.io'
@@ -15,16 +14,15 @@ def on_message(client, userdata, msg):
     topic = msg.topic
 
     base64_image = msg.payload
-    print(base64_image)
     plate_num = lpr.recognize(base64_image)
     db.insert_log(topic, base64_image, plate_num)
 
     print(db.select_last_log())
     print(db.get_parking_status())
     if plate_num is not None:
-        client.publish(topic + '/response', 1)
+        client.publish(topic + '/response', 1) # 1 means success
     else:
-        client.publish(topic + '/response', 0)
+        client.publish(topic + '/response', 0) # 0 means failure
 
 
 client = mqtt.Client("parklever_backend_python")

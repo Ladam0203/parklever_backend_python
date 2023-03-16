@@ -66,12 +66,24 @@ def recognize(base64_image):
     # Recognize the license plate
     Cropped_loc = './7.png'
     # cv2.imshow("cropped", cv2.imread(Cropped_loc))
-    plate = pytesseract.image_to_string(Cropped_loc, lang='eng')
+    plate_num = pytesseract.image_to_string(Cropped_loc, lang='eng')
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-    #Treat plate with regex
-    plate = re.sub(r'[^A-Za-z0-9+$]', '', plate)
-    print("Plate: " + plate)
-    if plate == "":
+    # Treat plate with regex
+    treated_plate_num = re.sub(r'[^A-Za-z0-9+$]', '', plate_num)
+    # Check for a danish license plate, to increase the accuracy of recognition
+    danish_plate_num = extract_danish_license_plate(treated_plate_num)
+    if danish_plate_num:
+        print(danish_plate_num)  # Output: DK12345
+    else:
+        print("No license plate found.")
+    return danish_plate_num
+
+
+def extract_danish_license_plate(text):
+    pattern = r'[A-Z]{2}\d{5}'
+    match = re.search(pattern, text)
+    if match:
+        return match.group()
+    else:
         return None
-    return plate
