@@ -20,8 +20,8 @@ def recognize(base64_image):
     original_image = cv2.imdecode(image_array, flags=cv2.IMREAD_COLOR)
     # Gray image
     gray_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2GRAY)
-    cv2.imshow("greyed image", gray_image)
-    cv2.waitKey(0)
+    # cv2.imshow("greyed image", gray_image)
+    # cv2.waitKey(0)
     # Smoothen image
     gray_image = cv2.bilateralFilter(gray_image, 11, 17, 17)
     # cv2.imshow("smoothened image", gray_image)
@@ -60,6 +60,7 @@ def recognize(base64_image):
     try:
         cv2.drawContours(image1, [screenCnt], -1, (0, 255, 0), 3)
     except:
+        print("No license plate found.")
         return None
     # cv2.imshow("image with detected license plate", image1)
     # cv2.waitKey(0)
@@ -70,7 +71,7 @@ def recognize(base64_image):
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
     # Treat plate with regex
-    treated_plate_num = re.sub(r'[^A-Za-z0-9+$]', '', plate_num)
+    treated_plate_num = re.sub(r'[^A-Z0-9+$]', '', plate_num)
     # Check for a danish license plate, to increase the accuracy of recognition
     danish_plate_num = extract_danish_license_plate(treated_plate_num)
     if danish_plate_num:

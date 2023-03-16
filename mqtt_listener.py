@@ -5,7 +5,7 @@ import db_connection as db
 # MQTT client configuration
 mqtt_broker = 'mqtt.flespi.io'
 mqtt_port = 1883
-mqtt_topic = 'parklever/1/1'
+mqtt_topic = 'parklever/+/+'
 mqtt_qos = 0
 token = "SwoZQpQ9og9iDXB4a6gcI6cZI9tYkiW2C9PioufAyfI107T0303AW3ns0HfbN11f"
 
